@@ -22,3 +22,13 @@ class UserDB(UserSchema):
 
 class UserList(BaseModel):
     users: list[UserPublic]
+
+class ProductSchema(BaseModel):
+    name: str
+    price: float
+    description: str
+    image: str
+    category: str
+    available: bool
+    quantity: int
+
