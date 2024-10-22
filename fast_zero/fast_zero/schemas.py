@@ -23,6 +23,7 @@ class UserDB(UserSchema):
 class UserList(BaseModel):
     users: list[UserPublic]
 
+
 class ProductSchema(BaseModel):
     name: str
     price: float
@@ -31,4 +32,3 @@ class ProductSchema(BaseModel):
     category: str
     available: bool
     quantity: int
-

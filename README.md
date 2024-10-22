@@ -4,6 +4,13 @@ Curso
 
 https://fastapidozero.dunossauro.com/
 
+Capítulos concluídos:
+	FastAPI do Zero!
+	Configurando o ambiente de desenvolvimento
+	Introdução ao desenvolvimento WEB
+	Estruturando o Projeto e Criando Rotas CRUD
+	Configurando o banco de dados e gerenciando migrações com Alembic
+
 Install
 
 - pipx
@@ -38,6 +45,15 @@ uvicorn fast_zero.app:app --reload
 Ferramentas usadas
 
 poetry add --group dev pytest pytest-cov taskipy ruff
+poetry add sqlalchemy
+poetry add pydantic-setting
+poetry add alembic
+
+Migração da base de dados:
+	alembic init migrations
+	alembic revision --autogenerate -m "create users table"
+	alembic upgrade head
+
 
 Configuração do Ruff no pyproject.toml
 
