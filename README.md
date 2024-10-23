@@ -10,6 +10,7 @@ Capítulos concluídos:
 	Introdução ao desenvolvimento WEB
 	Estruturando o Projeto e Criando Rotas CRUD
 	Configurando o banco de dados e gerenciando migrações com Alembic
+	Ingerando Banco de Dados a API
 
 Install
 
