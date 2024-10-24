@@ -12,6 +12,9 @@ sqlalchemy = "^2.0.36"
 pydantic-settings = "^2.6.0"
 alembic = "^1.13.3"
 pydantic = "^2.9.2"
+pyjwt = "^2.9.0"
+pwdlib = {extras = ["argon2"], version = "^0.2.1"}
+pytz = "^2024.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"

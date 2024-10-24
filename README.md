@@ -11,6 +11,7 @@ Capítulos concluídos:
 	Estruturando o Projeto e Criando Rotas CRUD
 	Configurando o banco de dados e gerenciando migrações com Alembic
 	Ingerando Banco de Dados a API
+	Autenticação e Autorização com JWT
 
 Install
 
@@ -49,6 +50,8 @@ poetry add --group dev pytest pytest-cov taskipy ruff
 poetry add sqlalchemy
 poetry add pydantic-setting
 poetry add alembic
+poetry add pyjwt "pwdlib[argon2]"
+poetry add pytz
 
 Migração da base de dados:
 	alembic init migrations
