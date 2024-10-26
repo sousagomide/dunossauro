@@ -12,6 +12,8 @@ Capítulos concluídos:
 	Configurando o banco de dados e gerenciando migrações com Alembic
 	Ingerando Banco de Dados a API
 	Autenticação e Autorização com JWT
+	Refatorando a Estrutura do Projeto
+	Tornando o sistema de autenticação robusto
 
 Install
 
@@ -52,6 +54,8 @@ poetry add pydantic-setting
 poetry add alembic
 poetry add pyjwt "pwdlib[argon2]"
 poetry add pytz
+poetry add --group dev factory-boy
+poetry add --group dev freezegun
 
 Migração da base de dados:
 	alembic init migrations
