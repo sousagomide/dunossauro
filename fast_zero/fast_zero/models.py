@@ -1,9 +1,11 @@
 from datetime import datetime
 from enum import Enum
+
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
+
 
 class TodoState(str, Enum):
     draft = 'draft'
@@ -11,6 +13,7 @@ class TodoState(str, Enum):
     doing = 'doing'
     done = 'done'
     trash = 'trash'
+
 
 @table_registry.mapped_as_dataclass
 class User:
@@ -22,6 +25,8 @@ class User:
     email: Mapped[str] = mapped_column(unique=True)
     created_at: Mapped[datetime] = mapped_column(init=False, server_default=func.now())
     update_at: Mapped[datetime] = mapped_column(init=False, server_default=func.now(), onupdate=func.now())
+    todos: Mapped[list['Todo']] = relationship(init=False, back_populates='user', cascade='all, delete-orphan')
+
 
 @table_registry.mapped_as_dataclass
 class Todo:

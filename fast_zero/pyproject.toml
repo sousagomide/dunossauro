@@ -23,6 +23,7 @@ taskipy = "^1.13.0"
 ruff = "^0.6.9"
 factory-boy = "^3.3.1"
 freezegun = "^1.5.1"
+pytz = "^2024.2"
 
 [tool.ruff]
 line-length = 79
