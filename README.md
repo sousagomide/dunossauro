@@ -14,6 +14,8 @@ Capítulos concluídos:
 	Autenticação e Autorização com JWT
 	Refatorando a Estrutura do Projeto
 	Tornando o sistema de autenticação robusto
+	Criando Rotas CRUD para Gerenciamento de Tarefas em FastAPI
+
 
 Install
 

@@ -1,4 +1,3 @@
-
 from sqlalchemy import select
 
 from fast_zero.models import Todo, User
@@ -25,7 +24,7 @@ def test_create_todo(session, user: User):
         title='Test Todo',
         description='Test Desc',
         state='draft',
-        user_id=user.id
+        user_id=user.id,
     )
     session.add(todo)
     session.commit()

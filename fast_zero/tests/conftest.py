@@ -30,7 +30,11 @@ class UserFactory(factory.Factory):
 @pytest.fixture
 def user(session):
     password = 'testtest'
-    user = User(username='Teste', email='teste@test.com', password=get_password_hash(password))
+    user = User(
+        username='Teste',
+        email='teste@test.com',
+        password=get_password_hash(password),
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -53,6 +57,7 @@ def other_user(session):
 def client(session):
     def get_session_override():
         return session
+
     with TestClient(app) as client:
         app.dependency_overrides[get_session] = get_session_override
         yield client
@@ -61,7 +66,11 @@ def client(session):
 
 @pytest.fixture
 def session():
-    engine = create_engine('sqlite:///:memory:', connect_args={'check_same_thread': False}, poolclass=StaticPool)
+    engine = create_engine(
+        'sqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
+    )
     table_registry.metadata.create_all(engine)
     with Session(engine) as session:
         yield session
@@ -75,6 +84,7 @@ def _mock_db_time(*, model, time=datetime(2024, 1, 1)):
             target.created_at = time
         if hasattr(target, 'updated_at'):
             target.updated_at = time
+
     event.listen(model, 'before_insert', fake_time_hook)
     yield time
     event.remove(model, 'before_insert', fake_time_hook)
@@ -87,5 +97,8 @@ def mock_db_time():
 
 @pytest.fixture
 def token(client, user):
-    response = client.post('/auth/token', data={'username': user.email, 'password': user.clean_password})
+    response = client.post(
+        '/auth/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
     return response.json()['access_token']

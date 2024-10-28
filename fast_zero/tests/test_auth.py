@@ -4,7 +4,10 @@ from freezegun import freeze_time
 
 
 def test_get_token(client, user):
-    response = client.post('/auth/token', data={'username': user.email, 'password': user.clean_password})
+    response = client.post(
+        '/auth/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
     token = response.json()
     assert response.status_code == HTTPStatus.OK
     assert 'access_token' in token
@@ -15,7 +18,7 @@ def test_token_expired_after_time(client, user):
     with freeze_time('2024-10-26 09:27:00'):
         response = client.post(
             '/auth/token',
-            data={'username': user.email, 'password': user.clean_password}
+            data={'username': user.email, 'password': user.clean_password},
         )
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
@@ -26,8 +29,8 @@ def test_token_expired_after_time(client, user):
             json={
                 'username': 'wrongwrong',
                 'email': 'wrong@wrong.com',
-                'password': 'wrong'
-            }
+                'password': 'wrong',
+            },
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED
         assert response.json() == {'detail': 'Não pode validar as credenciais'}
@@ -36,7 +39,7 @@ def test_token_expired_after_time(client, user):
 def test_token_inexistent_user(client):
     response = client.post(
         '/auth/token',
-        data={'username': 'no_user@no_domain.com', 'password': 'testtest'}
+        data={'username': 'no_user@no_domain.com', 'password': 'testtest'},
     )
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json() == {'detail': 'Senha ou email incorreto'}
@@ -45,7 +48,7 @@ def test_token_inexistent_user(client):
 def test_token_wrong_password(client, user):
     response = client.post(
         '/auth/token',
-        data={'username': user.email, 'password': 'wrong_password'}
+        data={'username': user.email, 'password': 'wrong_password'},
     )
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json() == {'detail': 'Senha ou email incorreto'}
@@ -53,8 +56,7 @@ def test_token_wrong_password(client, user):
 
 def test_refresh_token(client, user, token):
     response = client.post(
-        '/auth/refresh_token',
-        headers={'Authorization': f'Bearer {token}'}
+        '/auth/refresh_token', headers={'Authorization': f'Bearer {token}'}
     )
     data = response.json()
     assert response.status_code == HTTPStatus.OK
@@ -67,14 +69,13 @@ def test_token_expired_dont_refresh(client, user):
     with freeze_time('2024-10-26 09:27:00'):
         response = client.post(
             '/auth/token',
-            data={'username': user.email, 'password': user.clean_password}
+            data={'username': user.email, 'password': user.clean_password},
         )
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
     with freeze_time('2024-10-26 18:00:00'):
         response = client.post(
-            '/auth/refresh_token',
-            headers={'Authorization': f'Bearer {token}'}
+            '/auth/refresh_token', headers={'Authorization': f'Bearer {token}'}
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED
         assert response.json() == {'detail': 'Não pode validar as credenciais'}

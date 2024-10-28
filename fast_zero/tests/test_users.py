@@ -17,7 +17,7 @@ def test_create_user(client):
     assert response.json() == {
         'username': 'alice',
         'email': 'alice@example.com',
-        'id': 1
+        'id': 1,
     }
 
 
@@ -39,8 +39,8 @@ def test_update_integrity_error(client, user, token):
         json={
             'username': 'fausto',
             'email': 'fausto@example.com',
-            'password': 'secret'
-        }
+            'password': 'secret',
+        },
     )
     response_update = client.put(
         f'/users/{user.id}',
@@ -48,13 +48,11 @@ def test_update_integrity_error(client, user, token):
         json={
             'username': 'fausto',
             'email': 'bob@example.com',
-            'password': 'mynewpassword'
-        }
+            'password': 'mynewpassword',
+        },
     )
     assert response_update.status_code == HTTPStatus.CONFLICT
-    assert response_update.json() == {
-        'detail': 'Usuário ou E-mail existente'
-    }
+    assert response_update.json() == {'detail': 'Usuário ou E-mail existente'}
 
 
 def test_update_user(client, user, token):
@@ -64,8 +62,8 @@ def test_update_user(client, user, token):
         json={
             'username': 'bob',
             'email': 'bob@gmail.com',
-            'password': 'mynewpassword'
-        }
+            'password': 'mynewpassword',
+        },
     )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
@@ -76,7 +74,9 @@ def test_update_user(client, user, token):
 
 
 def test_delete_user(client, user, token):
-    response = client.delete(f'/users/{user.id}', headers={'Authorization': f'Bearer {token}'})
+    response = client.delete(
+        f'/users/{user.id}', headers={'Authorization': f'Bearer {token}'}
+    )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'Usuário deletado'}
 
@@ -88,8 +88,8 @@ def test_update_user_with_wrong_user(client, other_user, token):
         json={
             'username': 'bob',
             'email': 'bob@example.com',
-            'password': 'mynewpassword'
-        }
+            'password': 'mynewpassword',
+        },
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
     assert response.json() == {'detail': 'Usuário não possui permissão'}
@@ -97,8 +97,7 @@ def test_update_user_with_wrong_user(client, other_user, token):
 
 def test_delete_user_wrong_user(client, other_user, token):
     response = client.delete(
-        f'/users/{other_user.id}',
-        headers={'Authorization': f'Bearer {token}'}
+        f'/users/{other_user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
     assert response.json() == {'detail': 'Usuário não possui permissão'}

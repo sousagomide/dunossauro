@@ -36,11 +36,17 @@ def create_user(user: UserSchema, session: Sessoes):
     )
     if db_user:
         if db_user.username == user.username:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='Usuário já existe')
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST, detail='Usuário já existe'
+            )
         elif db_user.email == user.email:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='E-mail já existe')
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST, detail='E-mail já existe'
+            )
     hashed_password = get_password_hash(user.password)
-    db_user = User(username=user.username, password=hashed_password, email=user.email)
+    db_user = User(
+        username=user.username, password=hashed_password, email=user.email
+    )
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
@@ -49,17 +55,24 @@ def create_user(user: UserSchema, session: Sessoes):
 
 @router.get('/', response_model=UserList)
 def read_users(session: Sessoes, filter_users: Annotated[FilterPage, Query()]):
-    users = session.scalars(select(User).offset(filter_users.offset).limit(filter_users.limit)).all()
+    users = session.scalars(
+        select(User).offset(filter_users.offset).limit(filter_users.limit)
+    ).all()
     return {'users': users}
 
 
 @router.put('/{user_id}', response_model=UserPublic)
-def update_user(user_id: int, user: UserSchema, session: Sessoes, current_user: CurrentUser):
+def update_user(
+    user_id: int, user: UserSchema, session: Sessoes, current_user: CurrentUser
+):
     # db_user = session.scalar(select(User).where(User.id == user_id))
     # if not db_user:
     #     raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Usuário não encontrado')
     if current_user.id != user_id:
-        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Usuário não possui permissão')
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Usuário não possui permissão',
+        )
     try:
         current_user.username = user.username
         current_user.password = get_password_hash(user.password)
@@ -68,7 +81,10 @@ def update_user(user_id: int, user: UserSchema, session: Sessoes, current_user: 
         session.refresh(current_user)
         return current_user
     except IntegrityError:
-        raise HTTPException(status_code=HTTPStatus.CONFLICT, detail='Usuário ou E-mail existente')
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail='Usuário ou E-mail existente',
+        )
 
 
 @router.delete('/{user_id}', response_model=Message)
@@ -77,7 +93,10 @@ def delete_user(user_id: int, session: Sessoes, current_user: CurrentUser):
     # if not db_user:
     #     raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Usuário não encontrado')
     if current_user.id != user_id:
-        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Usuário não possui permissão')
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Usuário não possui permissão',
+        )
     session.delete(current_user)
     session.commit()
     return {'message': 'Usuário deletado'}

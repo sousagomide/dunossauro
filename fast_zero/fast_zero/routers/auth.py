@@ -25,9 +25,15 @@ Sessao = Annotated[Session, Depends(get_session)]
 def login_for_access_token(form_data: OAuth2Form, session: Sessao):
     user = session.scalar(select(User).where(User.email == form_data.username))
     if not user:
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='Senha ou email incorreto')
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Senha ou email incorreto',
+        )
     if not verify_password(form_data.password, user.password):
-        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail='Senha ou email incorreto')
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Senha ou email incorreto',
+        )
     access_token = create_access_token(data={'sub': user.email})
     return {'access_token': access_token, 'token_type': 'bearer'}
 
